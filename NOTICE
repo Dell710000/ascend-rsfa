@@ -1,0 +1,15 @@
+ASCEND-RSFA
+Copyright (c) 2026 ASCEND-RSFA Authors
+
+Third-party software
+--------------------
+
+baseline/06-fused-attention.py is derived from the TritonAscend fused
+attention tutorial maintained by Huawei Technologies Co., Ltd. The file is
+distributed under the MIT License and retains the original copyright and
+license notice in its source header.
+
+FlashAttention is a method introduced by Tri Dao and collaborators. References
+to FlashAttention describe the algorithmic lineage and do not imply that this
+repository is affiliated with or endorsed by the original FlashAttention
+project.

@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use ASCEND-RSFA, please cite the software and the accompanying manuscript."
+title: "ASCEND-RSFA: Execution-Pipeline and Causal-Region Specialization for FlashAttention on Ascend NPUs"
+type: software
+version: 0.1.0
+date-released: 2026-07-19
+license: BSD-3-Clause
+repository-code: "https://github.com/asdfghjkl509/ascend-rsfa"
+url: "https://github.com/asdfghjkl509/ascend-rsfa"
+authors:
+  - family-names: Zhao
+    given-names: Jingyan
+  - family-names: Liu
+    given-names: Yiqi
+  - family-names: Zhang
+    given-names: Ni
+  - family-names: Li
+    given-names: Xiang
+  - family-names: Zhu
+    given-names: XiaoAo
+  - family-names: Li
+    given-names: Zhiqiang
+  - family-names: Tian
+    given-names: Feng
+  - family-names: Zheng
+    given-names: Jie
+  - family-names: Cao
+    given-names: Rui
+  - family-names: Ren
+    given-names: Jie
+    email: renjie@snnu.edu.cn

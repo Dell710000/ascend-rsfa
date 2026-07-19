@@ -1,0 +1,179 @@
+========================================================================================================================
+  Flash Attention - Correctness Test Report
+  Optimized Kernel: flash_attention_forward.py
+  Reference: torch_npu.npu_fusion_attention
+  Criteria: atol=1e-2, rtol=1e-2
+  Hardware: Ascend910B3 | Framework: torch_npu + Triton-Ascend
+========================================================================================================================
+
+  ────────────────────────────────────────────────────────────────────────────────
+  Causal Attention (causal=True)
+  ────────────────────────────────────────────────────────────────────────────────
+
+Case      Z  H  N_CTX    D  dtype   BM   BN    Max Abs Error   Mean Abs Error  Status
+------------------------------------------------------------------------------------------------------------------------
+Case01   128  8   1024  128   fp16  128   64     9.765625e-04     8.517790e-06    PASS
+Case02   128  8   1024  256   fp16   64   64     9.765625e-04     1.568291e-05    PASS
+Case03   128  8   2048  128   fp16  128   64     9.765625e-04     7.287095e-06    PASS
+Case04   128  8   2048  256   fp16   64   64     9.765625e-04     1.348239e-05    PASS
+Case05   128  8   4096  128   fp16  128   32     9.765625e-04     5.850359e-06    PASS
+Case06   128  8   8192   64   fp16  128   64     4.882812e-04     2.887196e-06    PASS
+
+  ────────────────────────────────────────────────────────────────────────────────
+  Non-Causal Attention (causal=False)
+  ────────────────────────────────────────────────────────────────────────────────
+
+Case      Z  H  N_CTX    D  dtype   BM   BN    Max Abs Error   Mean Abs Error  Status
+------------------------------------------------------------------------------------------------------------------------
+Case07   128  8   1024  128   fp16  128  256     2.441406e-04     3.704419e-06    PASS
+Case08   128  8   1024  256   fp16   64  128     9.765625e-04     5.953194e-06    PASS
+Case09   128  8   2048  128   fp16  128  256     4.882812e-04     2.467599e-06    PASS
+Case10   128  8   2048  256   fp16   64  256     9.765625e-04     3.632728e-06    PASS
+Case11   128  8   4096  128   fp16  128  256     2.441406e-04     1.546910e-06    PASS
+Case12   128  8   8192   64   fp16  128  512     6.103516e-05     5.079885e-07    PASS
+
+========================================================================================================================
+  Summary
+========================================================================================================================
+  Total cases:          12
+  Passed:               12
+
+
+  Failed (precision):   0
+  Failed (runtime err): 0
+  Pass rate:            12/12 = 100.0%
+
+  Overall Max Absolute Error:  9.765625e-04
+  Overall Mean Absolute Error: 5.960048e-06
+  Max Absolute Error range:    [6.103516e-05, 9.765625e-04]
+  Mean Absolute Error range:   [5.079885e-07, 1.568291e-05]
+
+  Causal mode:
+    Max Absolute Error:  9.765625e-04
+    Mean Absolute Error: 8.951290e-06
+    Passed: 6/6
+  Non-Causal mode:
+    Max Absolute Error:  9.765625e-04
+    Mean Absolute Error: 2.968806e-06
+    Passed: 6/6
+
+========================================================================================================================
+  Detailed Results (Per Case)
+========================================================================================================================
+
+  --- Case  1: Z=128, H=8, N_CTX=1024, D=128, causal, BM=128, BN=64 ---
+    Reference output time:  130.1654 ms
+    Triton kernel time:     198.6427 ms
+    Max Absolute Error:     9.765625e-04
+    Mean Absolute Error:    8.517790e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case  2: Z=128, H=8, N_CTX=1024, D=256, causal, BM=64, BN=64 ---
+    Reference output time:  83.6354 ms
+    Triton kernel time:     35.6568 ms
+    Max Absolute Error:     9.765625e-04
+    Mean Absolute Error:    1.568291e-05
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case  3: Z=128, H=8, N_CTX=2048, D=128, causal, BM=128, BN=64 ---
+    Reference output time:  89.4019 ms
+    Triton kernel time:     35.8011 ms
+    Max Absolute Error:     9.765625e-04
+    Mean Absolute Error:    7.287095e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case  4: Z=128, H=8, N_CTX=2048, D=256, causal, BM=64, BN=64 ---
+    Reference output time:  179.3054 ms
+    Triton kernel time:     104.6585 ms
+    Max Absolute Error:     9.765625e-04
+    Mean Absolute Error:    1.348239e-05
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case  5: Z=128, H=8, N_CTX=4096, D=128, causal, BM=128, BN=32 ---
+    Reference output time:  193.2699 ms
+    Triton kernel time:     134.4581 ms
+    Max Absolute Error:     9.765625e-04
+    Mean Absolute Error:    5.850359e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case  6: Z=128, H=8, N_CTX=8192, D=64, causal, BM=128, BN=64 ---
+    Reference output time:  273.6149 ms
+    Triton kernel time:     397.6648 ms
+    Max Absolute Error:     4.882812e-04
+    Mean Absolute Error:    2.887196e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case  7: Z=128, H=8, N_CTX=1024, D=128, noncausal, BM=128, BN=256 ---
+    Reference output time:  43.5659 ms
+    Triton kernel time:     13.8758 ms
+    Max Absolute Error:     2.441406e-04
+    Mean Absolute Error:    3.704419e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case  8: Z=128, H=8, N_CTX=1024, D=256, noncausal, BM=64, BN=128 ---
+    Reference output time:  87.0385 ms
+    Triton kernel time:     40.0742 ms
+    Max Absolute Error:     9.765625e-04
+    Mean Absolute Error:    5.953194e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case  9: Z=128, H=8, N_CTX=2048, D=128, noncausal, BM=128, BN=256 ---
+    Reference output time:  94.7521 ms
+    Triton kernel time:     33.6261 ms
+    Max Absolute Error:     4.882812e-04
+    Mean Absolute Error:    2.467599e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case 10: Z=128, H=8, N_CTX=2048, D=256, noncausal, BM=64, BN=256 ---
+    Reference output time:  194.3696 ms
+    Triton kernel time:     52.0258 ms
+    Max Absolute Error:     9.765625e-04
+    Mean Absolute Error:    3.632728e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case 11: Z=128, H=8, N_CTX=4096, D=128, noncausal, BM=128, BN=256 ---
+    Reference output time:  220.2603 ms
+    Triton kernel time:     108.9306 ms
+    Max Absolute Error:     2.441406e-04
+    Mean Absolute Error:    1.546910e-06
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+  --- Case 12: Z=128, H=8, N_CTX=8192, D=64, noncausal, BM=128, BN=512 ---
+    Reference output time:  377.9761 ms
+    Triton kernel time:     323.3043 ms
+    Max Absolute Error:     6.103516e-05
+    Mean Absolute Error:    5.079885e-07
+    Tolerance:              atol=1e-2, rtol=1e-2
+    Status:                 PASS
+
+========================================================================================================================
+  Notes
+========================================================================================================================
+
+  1. Cases 2, 4, 6 (causal, D=256 or D=64) use original tilings (BM=64,BN=64 or
+     BM=128,BN=64) instead of optimal-performance tilings. The optimal-performance
+     tilings (BM=64,BN=256) cause NaN outputs in the causal split kernel path
+     (_run_causal_split) when bn_diag=256. This is a known limitation of the
+     current causal split implementation with large BN values.
+
+  2. All non-causal cases (7-12) pass correctness with the optimal-performance
+     tilings. Non-causal path uses STAGE=1 (full softmax pipeline), which is
+     numerically stable across all tested tiling configurations.
+
+  3. The pass rate is 12/12 (100%) with correctness-verified tilings.
+
+
+========================================================================================================================
+  End of Report
+========================================================================================================================

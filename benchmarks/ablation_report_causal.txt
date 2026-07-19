@@ -1,0 +1,122 @@
+============================================================================================================================================
+  FlashAttention V2 消融实验报告 - 6.3.2 因果路径 (正确性验证版)
+  生成时间: 2026-07-16 11:33:17
+  硬件环境: Ascend910B3 | 框架: torch_npu + Triton-Ascend
+  测试配置: warmup=5, iters=20
+  重要: 所有分块均先通过正确性验证 (rtol=1e-2, atol=1e-2) 再进行计时
+============================================================================================================================================
+
+  实验设置:
+    Baseline: 06-fused-attention.py (官方 FlashAttention V2, 固定20核grid)
+    V1:       Fused (STAGE=2 + num_stages=2 + 动态grid, 内循环匹配baseline)
+    V2:       Fused+Prefix-Diag (Prefix/Diagonal拆分 + FA4 rescale + 提前V load)
+    V3:       Baseline+Split (baseline内循环 + Prefix/Diagonal拆分, 无fused优化)
+
+  加速比定义:
+    S1 = T_baseline / T_V1   (V1: Fused优化 vs Baseline)
+    S2 = T_baseline / T_V2   (V2: Fused+Prefix-Diag vs Baseline)
+    S3 = T_baseline / T_V3   (V3: Baseline+Split vs Baseline)
+
+  编译参数对比:
+    Baseline: 固定grid(20), 无num_stages, 无multibuffer
+    V1:       动态grid, num_stages=2, 无multibuffer/tile_mix
+    V2:       动态grid, num_stages=2, num_warps=4, multibuffer, tile_mix(4,2)
+    V3:       动态grid, num_stages=2, 无multibuffer/tile_mix (同V1)
+
+  注: D=256 用例仅 (BM=64, BN=64) 通过全部变体正确性验证;
+     V2 的 (64,256) 分块在 D=256 时产生数值错误 (NaN/大误差), 已排除。
+
+Shape                 Z  H  N_CTX    D      Base(ms)       V1(ms)       V2(ms)       V3(ms)      S1      S2      S3
+--------------------------------------------------------------------------------------------------------------------------------------------
+c_1024_128          128  8   1024  128         17.87       17.77         8.98        12.32   1.01x   1.99x   1.45x
+c_1024_256          128  8   1024  256         35.66       30.48        25.97        27.73   1.17x   1.37x   1.29x
+c_2048_128          128  8   2048  128         58.40       57.93        29.01        38.38   1.01x   2.01x   1.52x
+c_2048_256          128  8   2048  256        123.84      108.44        97.46        99.80   1.14x   1.27x   1.24x
+c_4096_128          128  8   4096  128        209.80      208.71       103.96       132.26   1.01x   2.02x   1.59x
+c_8192_64           128  8   8192   64        759.91      758.86       388.84       414.21   1.00x   1.95x   1.83x
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+============================================================================================================================================
+  汇总统计
+============================================================================================================================================
+  S1 (V1 Fused) 总体加速比:            1.02x
+  S2 (V2 Fused+Prefix-Diag) 总体加速比: 1.84x
+  S3 (V3 Baseline+Split) 总体加速比:    1.66x
+  有效测试数: 6 / 6 (全部通过正确性验证)
+  Baseline 总耗时: 1205.48 ms
+  V1 总耗时:       1182.19 ms
+  V2 总耗时:       654.22 ms
+  V3 总耗时:       724.71 ms
+
+============================================================================================================================================
+  逐用例详情
+============================================================================================================================================
+
+  --- c_1024_128: Z=128, H=8, N_CTX=1024, D=128, BM=128, BN=64 ---
+    Baseline                       avg=17.870 ms, std=0.014 ms, correctness=PASS
+    V1 (Fused)                     avg=17.767 ms, std=0.033 ms, correctness=PASS
+    V2 (Fused+Prefix-Diag)         avg=8.982 ms, std=0.023 ms, correctness=PASS
+    V3 (Baseline+Split)            avg=12.316 ms, std=0.057 ms, correctness=PASS
+      Speedup (V1 vs Baseline) = 1.01x
+      Speedup (V2 vs Baseline) = 1.99x
+      Speedup (V3 vs Baseline) = 1.45x
+
+  --- c_1024_256: Z=128, H=8, N_CTX=1024, D=256, BM=64, BN=64 ---
+    Baseline                       avg=35.659 ms, std=0.076 ms, correctness=PASS
+    V1 (Fused)                     avg=30.483 ms, std=0.023 ms, correctness=PASS
+    V2 (Fused+Prefix-Diag)         avg=25.966 ms, std=0.070 ms, correctness=PASS
+    V3 (Baseline+Split)            avg=27.734 ms, std=0.068 ms, correctness=PASS
+      Speedup (V1 vs Baseline) = 1.17x
+      Speedup (V2 vs Baseline) = 1.37x
+      Speedup (V3 vs Baseline) = 1.29x
+
+  --- c_2048_128: Z=128, H=8, N_CTX=2048, D=128, BM=128, BN=64 ---
+    Baseline                       avg=58.399 ms, std=0.023 ms, correctness=PASS
+    V1 (Fused)                     avg=57.929 ms, std=0.053 ms, correctness=PASS
+    V2 (Fused+Prefix-Diag)         avg=29.009 ms, std=0.070 ms, correctness=PASS
+    V3 (Baseline+Split)            avg=38.384 ms, std=0.040 ms, correctness=PASS
+      Speedup (V1 vs Baseline) = 1.01x
+      Speedup (V2 vs Baseline) = 2.01x
+      Speedup (V3 vs Baseline) = 1.52x
+
+  --- c_2048_256: Z=128, H=8, N_CTX=2048, D=256, BM=64, BN=64 ---
+    Baseline                       avg=123.845 ms, std=0.228 ms, correctness=PASS
+    V1 (Fused)                     avg=108.443 ms, std=0.137 ms, correctness=PASS
+    V2 (Fused+Prefix-Diag)         avg=97.463 ms, std=0.153 ms, correctness=PASS
+    V3 (Baseline+Split)            avg=99.801 ms, std=0.167 ms, correctness=PASS
+      Speedup (V1 vs Baseline) = 1.14x
+      Speedup (V2 vs Baseline) = 1.27x
+      Speedup (V3 vs Baseline) = 1.24x
+
+  --- c_4096_128: Z=128, H=8, N_CTX=4096, D=128, BM=128, BN=64 ---
+    Baseline                       avg=209.798 ms, std=0.100 ms, correctness=PASS
+    V1 (Fused)                     avg=208.708 ms, std=0.419 ms, correctness=PASS
+    V2 (Fused+Prefix-Diag)         avg=103.961 ms, std=0.169 ms, correctness=PASS
+    V3 (Baseline+Split)            avg=132.263 ms, std=0.111 ms, correctness=PASS
+      Speedup (V1 vs Baseline) = 1.01x
+      Speedup (V2 vs Baseline) = 2.02x
+      Speedup (V3 vs Baseline) = 1.59x
+
+  --- c_8192_64: Z=128, H=8, N_CTX=8192, D=64, BM=128, BN=64 ---
+    Baseline                       avg=759.912 ms, std=0.768 ms, correctness=PASS
+    V1 (Fused)                     avg=758.856 ms, std=0.520 ms, correctness=PASS
+    V2 (Fused+Prefix-Diag)         avg=388.836 ms, std=0.291 ms, correctness=PASS
+    V3 (Baseline+Split)            avg=414.215 ms, std=0.080 ms, correctness=PASS
+      Speedup (V1 vs Baseline) = 1.00x
+      Speedup (V2 vs Baseline) = 1.95x
+      Speedup (V3 vs Baseline) = 1.83x
+
+============================================================================================================================================
+  消融分析
+============================================================================================================================================
+
+  V1 (Fused优化): num_stages=2 + 动态grid 带来 ~1-16% 提升 (D=256 最明显)
+  V2 (Fused+Prefix-Diag): 拆分 + FA4 rescale + 提前V load, 额外加速来自拆分架构
+  V3 (Baseline+Split): 纯拆分 (无fused优化), 可分离拆分本身 vs 融合优化的贡献
+
+  注: D=256 时所有变体均使用 (64,64) 分块; V2 的 (64,256) 经正确性验证确认
+     产生 NaN/数值错误, 已排除。D=256 场景下 V2 的加速潜力受限于 UB 安全的 BN。
+
+============================================================================================================================================
+  报告结束
+============================================================================================================================================

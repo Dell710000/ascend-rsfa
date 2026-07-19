@@ -1,0 +1,26 @@
+name: Bug report
+description: Report a correctness, build, or runtime problem
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the observed and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include NPU, OS, CANN, Python, PyTorch, torch_npu, and TritonAscend versions.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Provide the command, tensor shape, dtype, causal mode, and tiling.
+    validations:
+      required: true

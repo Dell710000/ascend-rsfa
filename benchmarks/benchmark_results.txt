@@ -1,0 +1,105 @@
+========================================================================================================================
+  Flash Attention - Final Performance Benchmark (Optimal Tiling)
+  Hardware: Ascend910B3 | Framework: torch_npu + Triton-Ascend
+========================================================================================================================
+
+  Optimized kernel:  flash_attention_forward.py (FlashAttention v2 optimized)
+  Baseline kernel:   06-fused-attention.py       (FlashAttention v2 baseline)
+
+  Note: Optimal BM/BN tiling determined via exhaustive search for each case+kernel.
+
+Case      Z  H  N_CTX    D    Causal   06-Baseline     Optimized   Speedup      Faster       Opt BM,BN      Base BM,BN
+------------------------------------------------------------------------------------------------------------------------
+Case01   128  8   1024  128    causal      17.79 ms       8.95 ms     1.99x   optimized        (128,64)        (128,64)
+Case02   128  8   1024  256    causal      35.57 ms      25.92 ms     1.37x   optimized         (64,64)         (64,64)
+Case03   128  8   2048  128    causal      58.58 ms      28.97 ms     2.02x   optimized        (128,64)        (128,64)
+Case04   128  8   2048  256    causal     123.31 ms      97.26 ms     1.27x   optimized         (64,64)         (64,64)
+Case05   128  8   4096  128    causal     211.44 ms     103.78 ms     2.04x   optimized        (128,64)        (128,64)
+Case06   128  8   8192   64    causal     760.84 ms     388.51 ms     1.96x   optimized        (128,64)        (128,64)
+Case07   128  8   1024  128 noncausal      14.34 ms       6.80 ms     2.11x   optimized       (128,256)       (128,128)
+Case08   128  8   1024  256 noncausal      25.98 ms      11.92 ms     2.18x   optimized        (64,256)        (64,256)
+Case09   128  8   2048  128 noncausal      56.41 ms      26.16 ms     2.16x   optimized       (128,256)       (128,128)
+Case10   128  8   2048  256 noncausal      96.90 ms      45.97 ms     2.11x   optimized        (64,256)        (64,256)
+Case11   128  8   4096  128 noncausal     224.25 ms     102.08 ms     2.20x   optimized       (128,256)       (128,128)
+Case12   128  8   8192   64 noncausal     594.25 ms     302.76 ms     1.96x   optimized       (128,512)       (128,256)
+------------------------------------------------------------------------------------------------------------------------
+
+========================================================================================================================
+  Summary
+========================================================================================================================
+  Valid test cases:     12 / 12
+  Total baseline time:  2219.687 ms  (2.220 s)
+  Total optimized time: 1149.084 ms  (1.149 s)
+  Overall speedup:      1.93x
+  Speedup range:        1.27x ~ 2.20x
+  Time saved:           1070.603 ms  (1.071 s)
+  Causal speedup:       1.85x
+  Non-causal speedup:   2.04x
+
+========================================================================================================================
+  Per-Case Details
+========================================================================================================================
+
+  --- Case  1: Z=128, H=8, N_CTX=1024, D=128, causal ---
+    Optimized:  avg=8.9454 ms, min=8.8823 ms, max=8.9738 ms, BM=128, BN=64
+    Baseline:   avg=17.7903 ms, min=17.7638 ms, max=17.8495 ms, BM=128, BN=64
+    Speedup:    1.99x (optimized is faster)
+
+  --- Case  2: Z=128, H=8, N_CTX=1024, D=256, causal ---
+    Optimized:  avg=25.9159 ms, min=25.8235 ms, max=26.0511 ms, BM=64, BN=64
+    Baseline:   avg=35.5730 ms, min=35.4862 ms, max=35.6172 ms, BM=64, BN=64
+    Speedup:    1.37x (optimized is faster)
+
+  --- Case  3: Z=128, H=8, N_CTX=2048, D=128, causal ---
+    Optimized:  avg=28.9749 ms, min=28.8834 ms, max=29.1183 ms, BM=128, BN=64
+    Baseline:   avg=58.5842 ms, min=58.5505 ms, max=58.6743 ms, BM=128, BN=64
+    Speedup:    2.02x (optimized is faster)
+
+  --- Case  4: Z=128, H=8, N_CTX=2048, D=256, causal ---
+    Optimized:  avg=97.2631 ms, min=97.0586 ms, max=97.3758 ms, BM=64, BN=64
+    Baseline:   avg=123.3063 ms, min=123.0217 ms, max=123.6836 ms, BM=64, BN=64
+    Speedup:    1.27x (optimized is faster)
+
+  --- Case  5: Z=128, H=8, N_CTX=4096, D=128, causal ---
+    Optimized:  avg=103.7820 ms, min=103.5523 ms, max=104.1174 ms, BM=128, BN=64
+    Baseline:   avg=211.4417 ms, min=211.3098 ms, max=211.5573 ms, BM=128, BN=64
+    Speedup:    2.04x (optimized is faster)
+
+  --- Case  6: Z=128, H=8, N_CTX=8192, D=64, causal ---
+    Optimized:  avg=388.5052 ms, min=387.9707 ms, max=389.1657 ms, BM=128, BN=64
+    Baseline:   avg=760.8449 ms, min=760.2097 ms, max=761.8227 ms, BM=128, BN=64
+    Speedup:    1.96x (optimized is faster)
+
+  --- Case  7: Z=128, H=8, N_CTX=1024, D=128, noncausal ---
+    Optimized:  avg=6.7999 ms, min=6.7382 ms, max=6.8538 ms, BM=128, BN=256
+    Baseline:   avg=14.3436 ms, min=14.3016 ms, max=14.3788 ms, BM=128, BN=128
+    Speedup:    2.11x (optimized is faster)
+
+  --- Case  8: Z=128, H=8, N_CTX=1024, D=256, noncausal ---
+    Optimized:  avg=11.9237 ms, min=11.8334 ms, max=12.0248 ms, BM=64, BN=256
+    Baseline:   avg=25.9847 ms, min=25.9648 ms, max=26.0036 ms, BM=64, BN=256
+    Speedup:    2.18x (optimized is faster)
+
+  --- Case  9: Z=128, H=8, N_CTX=2048, D=128, noncausal ---
+    Optimized:  avg=26.1577 ms, min=25.8744 ms, max=26.4127 ms, BM=128, BN=256
+    Baseline:   avg=56.4134 ms, min=56.3421 ms, max=56.5151 ms, BM=128, BN=128
+    Speedup:    2.16x (optimized is faster)
+
+  --- Case 10: Z=128, H=8, N_CTX=2048, D=256, noncausal ---
+    Optimized:  avg=45.9738 ms, min=45.8363 ms, max=46.1028 ms, BM=64, BN=256
+    Baseline:   avg=96.9046 ms, min=96.8002 ms, max=97.0643 ms, BM=64, BN=256
+    Speedup:    2.11x (optimized is faster)
+
+  --- Case 11: Z=128, H=8, N_CTX=4096, D=128, noncausal ---
+    Optimized:  avg=102.0790 ms, min=101.3745 ms, max=102.3487 ms, BM=128, BN=256
+    Baseline:   avg=224.2492 ms, min=224.0541 ms, max=224.3900 ms, BM=128, BN=128
+    Speedup:    2.20x (optimized is faster)
+
+  --- Case 12: Z=128, H=8, N_CTX=8192, D=64, noncausal ---
+    Optimized:  avg=302.7637 ms, min=302.5361 ms, max=303.0635 ms, BM=128, BN=512
+    Baseline:   avg=594.2513 ms, min=593.9605 ms, max=594.4420 ms, BM=128, BN=256
+    Speedup:    1.96x (optimized is faster)
+
+========================================================================================================================
+  End of Report
+========================================================================================================================

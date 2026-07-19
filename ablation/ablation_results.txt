@@ -1,0 +1,158 @@
+==============================================================================================================
+ASCEND-RSFA Ablation Study Results
+==============================================================================================================
+Date: 2026-07-18 04:36:45
+Warmup iterations: 10
+Measurement iterations: 100
+Device: npu
+
+Version                                  Causal      N    d    Mean(ms)    Std(ms)    Min(ms)    Max(ms)          Var
+--------------------------------------------------------------------------------------------------------------
+Official (Baseline)                           Y   1024  128     17.8315     0.0162    17.8005    17.9316     0.000263
+Official (Baseline)                           Y   1024  256     30.8072     0.1284    30.7360    31.9749     0.016487
+Official (Baseline)                           Y   2048  128     58.4490     0.0517    58.3827    58.6702     0.002672
+Official (Baseline)                           Y   2048  256    108.9412     0.0965   108.7893   109.2765     0.009304
+Official (Baseline)                           Y   4096  128    208.2446     0.1116   208.0729   208.6198     0.012456
+Official (Baseline)                           Y   8192   64    758.6406     0.3233   757.9660   759.5022     0.104533
+Official (Baseline)                           N   1024  128     22.3917     0.0348    22.3162    22.5160     0.001209
+Official (Baseline)                           N   1024  256     25.4559     0.0332    25.3807    25.5740     0.001101
+Official (Baseline)                           N   2048  128     88.6314     0.0615    88.5326    88.8048     0.003779
+Official (Baseline)                           N   2048  256     80.3991     0.0533    80.3097    80.5857     0.002840
+Official (Baseline)                           N   4096  128    229.9473     0.1440   229.6604   230.2941     0.020741
+Official (Baseline)                           N   8192   64    615.2778     0.1769   614.6854   615.7149     0.031307
+V1 (+ K/V Address Advance)                    Y   1024  128     17.6694     0.0170    17.6082    17.7420     0.000290
+V1 (+ K/V Address Advance)                    Y   1024  256     29.7886     0.0369    29.7439    29.9708     0.001365
+V1 (+ K/V Address Advance)                    Y   2048  128     58.1844     0.0515    58.1167    58.4499     0.002654
+V1 (+ K/V Address Advance)                    Y   2048  256    105.7100     0.0571   105.6148   105.9018     0.003258
+V1 (+ K/V Address Advance)                    Y   4096  128    207.8314     0.1043   207.6437   208.0909     0.010886
+V1 (+ K/V Address Advance)                    Y   8192   64    758.7465     0.3300   758.0145   759.5987     0.108892
+V1 (+ K/V Address Advance)                    N   1024  128     22.2674     0.0359    22.2016    22.3934     0.001288
+V1 (+ K/V Address Advance)                    N   1024  256     23.7556     0.0346    23.6770    23.8848     0.001199
+V1 (+ K/V Address Advance)                    N   2048  128     88.3341     0.0677    88.2101    88.5980     0.004581
+V1 (+ K/V Address Advance)                    N   2048  256     71.8180     0.0503    71.7254    72.0009     0.002527
+V1 (+ K/V Address Advance)                    N   4096  128    228.0285     0.1789   227.6563   228.5342     0.032011
+V1 (+ K/V Address Advance)                    N   8192   64    615.8757     0.2176   615.3078   616.3835     0.047341
+V2 (+ numcores Dynamic + Persistent)          Y   1024  128     17.6725     0.0236    17.6325    17.8009     0.000557
+V2 (+ numcores Dynamic + Persistent)          Y   1024  256     29.7928     0.0443    29.7376    30.0979     0.001964
+V2 (+ numcores Dynamic + Persistent)          Y   2048  128     58.2134     0.0499    58.1493    58.5008     0.002491
+V2 (+ numcores Dynamic + Persistent)          Y   2048  256    105.7632     0.0748   105.6526   106.0146     0.005592
+V2 (+ numcores Dynamic + Persistent)          Y   4096  128    207.9937     0.1101   207.8057   208.2995     0.012114
+V2 (+ numcores Dynamic + Persistent)          Y   8192   64    757.9094     0.2727   757.3060   758.7731     0.074354
+V2 (+ numcores Dynamic + Persistent)          N   1024  128     22.2771     0.0392    22.2116    22.4507     0.001538
+V2 (+ numcores Dynamic + Persistent)          N   1024  256     23.7700     0.0482    23.6913    24.0179     0.002324
+V2 (+ numcores Dynamic + Persistent)          N   2048  128     88.3800     0.0688    88.2727    88.5908     0.004730
+V2 (+ numcores Dynamic + Persistent)          N   2048  256     71.8430     0.0628    71.7616    72.0911     0.003948
+V2 (+ numcores Dynamic + Persistent)          N   4096  128    228.0678     0.2006   227.6896   228.6346     0.040244
+V2 (+ numcores Dynamic + Persistent)          N   8192   64    615.4240     0.1921   614.9661   615.9479     0.036891
+V3 (+ Compile Pipeline Config)      Y   1024  128     20.3419     0.0759    20.2058    20.6980     0.005758
+V3 (+ Compile Pipeline Config)      Y   1024  256     38.1736     0.0885    37.9611    38.3745     0.007835
+V3 (+ Compile Pipeline Config)      Y   2048  128     63.2825     0.1462    62.9993    63.7164     0.021371
+V3 (+ Compile Pipeline Config)      Y   2048  256    121.5180     0.1839   121.1131   122.0503     0.033804
+V3 (+ Compile Pipeline Config)      Y   4096  128    218.0426     0.2632   217.4251   218.6357     0.069286
+V3 (+ Compile Pipeline Config)      Y   8192   64    802.2188     0.4293   801.0561   803.2049     0.184331
+V3 (+ Compile Pipeline Config)      N   1024  128     23.3422     0.0503    23.2701    23.5395     0.002532
+V3 (+ Compile Pipeline Config)      N   1024  256     23.4295     0.0595    23.3316    23.6493     0.003540
+V3 (+ Compile Pipeline Config)      N   2048  128     92.4878     0.1379    92.1725    92.8260     0.019016
+V3 (+ Compile Pipeline Config)      N   2048  256     46.5570     0.0714    46.4375    46.8343     0.005096
+V3 (+ Compile Pipeline Config)      N   4096  128    185.9124     0.1901   185.4057   186.3714     0.036130
+V3 (+ Compile Pipeline Config)      N   8192   64    386.0164     0.1492   385.7681   386.4211     0.022272
+ASCEND-RSFA (+ Causal Region Split)           Y   1024  128      8.9354     0.0526     8.8799     9.3767     0.002767
+ASCEND-RSFA (+ Causal Region Split)           Y   1024  256     26.5458     0.0732    26.4430    26.9697     0.005362
+ASCEND-RSFA (+ Causal Region Split)           Y   2048  128     28.9471     0.0791    28.7731    29.3254     0.006257
+ASCEND-RSFA (+ Causal Region Split)           Y   2048  256     98.8742     0.1446    98.6221    99.2834     0.020900
+ASCEND-RSFA (+ Causal Region Split)           Y   4096  128    104.0328     0.1608   103.6320   104.4363     0.025858
+ASCEND-RSFA (+ Causal Region Split)           Y   8192   64    392.3863     0.4366   391.4987   393.6362     0.190591
+ASCEND-RSFA (+ Causal Region Split)           N   1024  128     23.3445     0.0458    23.2639    23.4766     0.002097
+ASCEND-RSFA (+ Causal Region Split)           N   1024  256     23.3921     0.0615    23.3010    23.6647     0.003786
+ASCEND-RSFA (+ Causal Region Split)           N   2048  128     92.4769     0.1403    92.2077    92.9106     0.019683
+ASCEND-RSFA (+ Causal Region Split)           N   2048  256     46.5623     0.0723    46.4442    46.8607     0.005226
+ASCEND-RSFA (+ Causal Region Split)           N   4096  128    186.2603     0.2284   185.8286   186.9303     0.052146
+ASCEND-RSFA (+ Causal Region Split)           N   8192   64    386.8469     0.1477   386.4543   387.2376     0.021817
+
+==============================================================================================================
+Speedup Analysis (vs Official Baseline)
+==============================================================================================================
+
+--- N=1024 d=128 causal ---
+  Official (Baseline)                          :  17.8315ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   :  17.6694ms  speedup=1.01x
+  V2 (+ numcores Dynamic + Persistent)         :  17.6725ms  speedup=1.01x
+  V3 (+ Compile Pipeline Config):  20.3419ms  speedup=0.88x
+  ASCEND-RSFA (+ Causal Region Split)          :   8.9354ms  speedup=2.00x
+
+--- N=1024 d=256 causal ---
+  Official (Baseline)                          :  30.8072ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   :  29.7886ms  speedup=1.03x
+  V2 (+ numcores Dynamic + Persistent)         :  29.7928ms  speedup=1.03x
+  V3 (+ Compile Pipeline Config):  38.1736ms  speedup=0.81x
+  ASCEND-RSFA (+ Causal Region Split)          :  26.5458ms  speedup=1.16x
+
+--- N=2048 d=128 causal ---
+  Official (Baseline)                          :  58.4490ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   :  58.1844ms  speedup=1.00x
+  V2 (+ numcores Dynamic + Persistent)         :  58.2134ms  speedup=1.00x
+  V3 (+ Compile Pipeline Config):  63.2825ms  speedup=0.92x
+  ASCEND-RSFA (+ Causal Region Split)          :  28.9471ms  speedup=2.02x
+
+--- N=2048 d=256 causal ---
+  Official (Baseline)                          : 108.9412ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   : 105.7100ms  speedup=1.03x
+  V2 (+ numcores Dynamic + Persistent)         : 105.7632ms  speedup=1.03x
+  V3 (+ Compile Pipeline Config): 121.5180ms  speedup=0.90x
+  ASCEND-RSFA (+ Causal Region Split)          :  98.8742ms  speedup=1.10x
+
+--- N=4096 d=128 causal ---
+  Official (Baseline)                          : 208.2446ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   : 207.8314ms  speedup=1.00x
+  V2 (+ numcores Dynamic + Persistent)         : 207.9937ms  speedup=1.00x
+  V3 (+ Compile Pipeline Config): 218.0426ms  speedup=0.96x
+  ASCEND-RSFA (+ Causal Region Split)          : 104.0328ms  speedup=2.00x
+
+--- N=8192 d=64 causal ---
+  Official (Baseline)                          : 758.6406ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   : 758.7465ms  speedup=1.00x
+  V2 (+ numcores Dynamic + Persistent)         : 757.9094ms  speedup=1.00x
+  V3 (+ Compile Pipeline Config): 802.2188ms  speedup=0.95x
+  ASCEND-RSFA (+ Causal Region Split)          : 392.3863ms  speedup=1.93x
+
+--- N=1024 d=128 non-causal ---
+  Official (Baseline)                          :  22.3917ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   :  22.2674ms  speedup=1.01x
+  V2 (+ numcores Dynamic + Persistent)         :  22.2771ms  speedup=1.01x
+  V3 (+ Compile Pipeline Config):  23.3422ms  speedup=0.96x
+  ASCEND-RSFA (+ Causal Region Split)          :  23.3445ms  speedup=0.96x
+
+--- N=1024 d=256 non-causal ---
+  Official (Baseline)                          :  25.4559ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   :  23.7556ms  speedup=1.07x
+  V2 (+ numcores Dynamic + Persistent)         :  23.7700ms  speedup=1.07x
+  V3 (+ Compile Pipeline Config):  23.4295ms  speedup=1.09x
+  ASCEND-RSFA (+ Causal Region Split)          :  23.3921ms  speedup=1.09x
+
+--- N=2048 d=128 non-causal ---
+  Official (Baseline)                          :  88.6314ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   :  88.3341ms  speedup=1.00x
+  V2 (+ numcores Dynamic + Persistent)         :  88.3800ms  speedup=1.00x
+  V3 (+ Compile Pipeline Config):  92.4878ms  speedup=0.96x
+  ASCEND-RSFA (+ Causal Region Split)          :  92.4769ms  speedup=0.96x
+
+--- N=2048 d=256 non-causal ---
+  Official (Baseline)                          :  80.3991ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   :  71.8180ms  speedup=1.12x
+  V2 (+ numcores Dynamic + Persistent)         :  71.8430ms  speedup=1.12x
+  V3 (+ Compile Pipeline Config):  46.5570ms  speedup=1.73x
+  ASCEND-RSFA (+ Causal Region Split)          :  46.5623ms  speedup=1.73x
+
+--- N=4096 d=128 non-causal ---
+  Official (Baseline)                          : 229.9473ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   : 228.0285ms  speedup=1.01x
+  V2 (+ numcores Dynamic + Persistent)         : 228.0678ms  speedup=1.01x
+  V3 (+ Compile Pipeline Config): 185.9124ms  speedup=1.24x
+  ASCEND-RSFA (+ Causal Region Split)          : 186.2603ms  speedup=1.23x
+
+--- N=8192 d=64 non-causal ---
+  Official (Baseline)                          : 615.2778ms  speedup=1.00x
+  V1 (+ K/V Address Advance)                   : 615.8757ms  speedup=1.00x
+  V2 (+ numcores Dynamic + Persistent)         : 615.4240ms  speedup=1.00x
+  V3 (+ Compile Pipeline Config): 386.0164ms  speedup=1.59x
+  ASCEND-RSFA (+ Causal Region Split)          : 386.8469ms  speedup=1.59x

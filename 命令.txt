@@ -1,0 +1,19 @@
+ASCEND-RSFA 常用命令（在仓库根目录执行）
+
+1. 正确性验证
+python benchmarks/run_correctness_test.py
+
+2. 最终性能对比
+python benchmarks/run_final_benchmark.py
+
+3. 五版本消融实验
+python ablation/run_ablation.py --mode timing
+
+4. 优化版 msprof benchmark
+python benchmarks/benchmark_06_msprof.py --kernel ascend_rsfa/flash_attention_forward.py --out benchmarks/result_opt --all
+
+5. 基线 msprof benchmark
+python benchmarks/benchmark_06_msprof.py --kernel baseline/06-fused-attention.py --out benchmarks/result_baseline --all
+
+6. 最优分块搜索
+python tiling/search_optimal_tiling.py --kernel ascend_rsfa/flash_attention_forward.py --kernel-name ascend-rsfa --output tiling/tiling_search_optimized.json

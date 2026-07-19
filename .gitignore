@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+build/
+dist/
+
+# Editor and local agent configuration
+.vscode/
+.idea/
+.claude/
+.agents/
+.codex/
+settings.local.json
+
+# Local development snapshots superseded by ablation/
+test/
+
+# Generated benchmark and profiling artifacts
+**/result/
+**/result_*/
+**/ablation_msprof/
+**/profiler_output/
+**/msprof_*/
+*.log
